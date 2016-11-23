@@ -142,11 +142,12 @@ public final class JsonPatch
         throws JsonPatchException
     {
         BUNDLE.checkNotNull(node, "jsonPatch.nullInput");
-        JsonNode ret = node;
+
+        JsonNode ret = node.deepCopy();
 
         for (int i = 0; i < operations.size(); i++) {
           final JsonPatchOperation operation = operations.get(i);
-          ret = operation.apply(ret, i);
+          ret = operation.applyMutating(ret, i);
         }
 
         return ret;

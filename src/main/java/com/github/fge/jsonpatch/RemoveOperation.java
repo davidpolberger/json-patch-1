@@ -50,7 +50,7 @@ public final class RemoveOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node, final int index)
+    protected JsonNode applyMutating(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (path.isEmpty())
@@ -61,14 +61,13 @@ public final class RemoveOperation
                               index,
                               "remove",
                               path.toString()));
-        final JsonNode ret = node.deepCopy();
-        final JsonNode parentNode = path.parent().get(ret);
+        final JsonNode parentNode = path.parent().get(node);
         final String raw = Iterables.getLast(path).getToken().getRaw();
         if (parentNode.isObject())
             ((ObjectNode) parentNode).remove(raw);
         else
             ((ArrayNode) parentNode).remove(Integer.parseInt(raw));
-        return ret;
+        return node;
     }
 
     @Override
