@@ -78,7 +78,7 @@ public final class AddOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node, final int index)
+    protected JsonNode applyMutating(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (path.isEmpty())
@@ -111,13 +111,12 @@ public final class AddOperation
                                 final int opIndex)
         throws JsonPatchException
     {
-        final JsonNode ret = node.deepCopy();
-        final ArrayNode target = (ArrayNode) path.parent().get(ret);
+        final ArrayNode target = (ArrayNode) path.parent().get(node);
         final TokenResolver<JsonNode> token = Iterables.getLast(path);
 
         if (token.getToken().equals(LAST_ARRAY_ELEMENT)) {
             target.add(value);
-            return ret;
+            return node;
         }
 
         final int size = target.size();
@@ -142,14 +141,14 @@ public final class AddOperation
                               index));
 
         target.insert(index, value);
-        return ret;
+        return node;
     }
 
   private JsonNode addToObject(final JsonPointer path,
                                final JsonNode node,
                                final int index)
     {
-        final JsonNode ret = node.deepCopy();
+        final JsonNode ret = node;
         final ObjectNode target = (ObjectNode) path.parent().get(ret);
         target.put(Iterables.getLast(path).getToken().getRaw(), value);
         return ret;

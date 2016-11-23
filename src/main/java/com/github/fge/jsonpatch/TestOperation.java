@@ -53,7 +53,7 @@ public final class TestOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node, final int index)
+    protected JsonNode applyMutating(final JsonNode node, final int index)
         throws JsonPatchException
     {
         final JsonNode tested = path.path(node);
@@ -69,6 +69,6 @@ public final class TestOperation
                               index,
                               "test",
                               path.toString()));
-        return node.deepCopy();
+        return node;
     }
 }

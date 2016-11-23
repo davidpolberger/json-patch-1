@@ -73,11 +73,11 @@ public final class MoveOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node, final int index)
+    protected JsonNode applyMutating(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (from.equals(path))
-            return node.deepCopy();
+            return node;
         final JsonNode movedNode = from.path(node);
         if (movedNode.isMissingNode())
             throw new JsonPatchException(
@@ -87,6 +87,6 @@ public final class MoveOperation
                               from.toString()));
         final JsonPatchOperation remove = new RemoveOperation(from);
         final JsonPatchOperation add = new AddOperation(path, movedNode);
-        return add.apply(remove.apply(node, index), index);
+        return add.applyMutating(remove.applyMutating(node, index), index);
     }
 }

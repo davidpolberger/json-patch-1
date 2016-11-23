@@ -51,7 +51,7 @@ public final class CopyOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node, final int index)
+    protected JsonNode applyMutating(final JsonNode node, final int index)
         throws JsonPatchException
     {
         final JsonNode dupData = from.path(node).deepCopy();
@@ -61,6 +61,6 @@ public final class CopyOperation
                               index,
                               "copy",
                               from.toString()));
-        return new AddOperation(path, dupData).apply(node, index);
+        return new AddOperation(path, dupData).applyMutating(node);
     }
 }
