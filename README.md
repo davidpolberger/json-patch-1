@@ -1,3 +1,9 @@
+## This particular branch
+
+This branch includes large performance gains authored by
+[jayanderson](https://github.com/jayanderson). It also includes much-improved
+error messages.
+
 ## Travis builds now enabled
 
 Builds are now verified by Travis (see [issue #20](https://github.com/daveclayton/json-patch/issues/20) for details)
@@ -146,4 +152,3 @@ Applying a patch also uses an `.apply()` method:
 // orig is also a JsonNode
 final JsonNode patched = patch.apply(orig);
 ```
-

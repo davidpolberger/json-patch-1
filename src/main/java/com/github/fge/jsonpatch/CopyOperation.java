@@ -51,13 +51,16 @@ public final class CopyOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException
     {
         final JsonNode dupData = from.path(node).deepCopy();
         if (dupData.isMissingNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchPath"));
-        return new AddOperation(path, dupData).apply(node);
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchPath",
+                              index,
+                              "copy",
+                              from.toString()));
+        return new AddOperation(path, dupData).apply(node, index);
     }
 }

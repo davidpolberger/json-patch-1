@@ -53,16 +53,22 @@ public final class TestOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException
     {
         final JsonNode tested = path.path(node);
         if (tested.isMissingNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchPath"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchPath",
+                              index,
+                              "test",
+                              path.toString()));
         if (!EQUIVALENCE.equivalent(tested, value))
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.valueTestFailure"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.valueTestFailure",
+                              index,
+                              "test",
+                              path.toString()));
         return node.deepCopy();
     }
 }

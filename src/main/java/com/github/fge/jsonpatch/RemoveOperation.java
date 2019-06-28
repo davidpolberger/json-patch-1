@@ -50,14 +50,17 @@ public final class RemoveOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (path.isEmpty())
             return MissingNode.getInstance();
         if (path.path(node).isMissingNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchPath"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchPath",
+                              index,
+                              "remove",
+                              path.toString()));
         final JsonNode ret = node.deepCopy();
         final JsonNode parentNode = path.parent().get(ret);
         final String raw = Iterables.getLast(path).getToken().getRaw();

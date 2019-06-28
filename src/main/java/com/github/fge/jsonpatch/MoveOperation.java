@@ -73,17 +73,20 @@ public final class MoveOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (from.equals(path))
             return node.deepCopy();
         final JsonNode movedNode = from.path(node);
         if (movedNode.isMissingNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchPath"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchPath",
+                              index,
+                              "move",
+                              from.toString()));
         final JsonPatchOperation remove = new RemoveOperation(from);
         final JsonPatchOperation add = new AddOperation(path, movedNode);
-        return add.apply(remove.apply(node));
+        return add.apply(remove.apply(node, index), index);
     }
 }

@@ -143,8 +143,11 @@ public final class JsonPatch
     {
         BUNDLE.checkNotNull(node, "jsonPatch.nullInput");
         JsonNode ret = node;
-        for (final JsonPatchOperation operation: operations)
-            ret = operation.apply(ret);
+
+        for (int i = 0; i < operations.size(); i++) {
+          final JsonPatchOperation operation = operations.get(i);
+          ret = operation.apply(ret, i);
+        }
 
         return ret;
     }

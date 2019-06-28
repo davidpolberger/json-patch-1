@@ -78,7 +78,7 @@ public final class AddOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException
     {
         if (path.isEmpty())
@@ -90,17 +90,25 @@ public final class AddOperation
          */
         final JsonNode parentNode = path.parent().path(node);
         if (parentNode.isMissingNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchParent"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchParent",
+                              index,
+                              "add",
+                              path.parent().toString()));
         if (!parentNode.isContainerNode())
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.parentNotContainer"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.parentNotContainer",
+                              index,
+                              "add",
+                              path.parent().toString()));
         return parentNode.isArray()
-            ? addToArray(path, node)
-            : addToObject(path, node);
+            ? addToArray(path, node, index)
+            : addToObject(path, node, index);
     }
 
-    private JsonNode addToArray(final JsonPointer path, final JsonNode node)
+    private JsonNode addToArray(final JsonPointer path,
+                                final JsonNode node,
+                                final int opIndex)
         throws JsonPatchException
     {
         final JsonNode ret = node.deepCopy();
@@ -117,19 +125,29 @@ public final class AddOperation
         try {
             index = Integer.parseInt(token.toString());
         } catch (NumberFormatException ignored) {
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.notAnIndex"));
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.notAnIndex",
+                              opIndex,
+                              "add",
+                              path.toString(),
+                              token.toString()));
         }
 
-        if (index < 0 || index > size)
-            throw new JsonPatchException(BUNDLE.getMessage(
-                "jsonPatch.noSuchIndex"));
+        if (index < 0 || index > size) // TODO: off-by-one error? index <= size
+            throw new JsonPatchException(
+                BUNDLE.printf("jsonPatch.noSuchIndex",
+                              opIndex,
+                              "add",
+                              path.toString(),
+                              index));
 
         target.insert(index, value);
         return ret;
     }
 
-    private JsonNode addToObject(final JsonPointer path, final JsonNode node)
+  private JsonNode addToObject(final JsonPointer path,
+                               final JsonNode node,
+                               final int index)
     {
         final JsonNode ret = node.deepCopy();
         final ObjectNode target = (ObjectNode) path.parent().get(ret);

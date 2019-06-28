@@ -87,11 +87,12 @@ public abstract class JsonPatchOperation
     /**
      * Apply this operation to a JSON value
      *
+     * @param index the index of the operation in the list of operations
      * @param node the value to patch
      * @return the patched value
      * @throws JsonPatchException operation failed to apply to this value
      */
-    public abstract JsonNode apply(final JsonNode node)
+    public abstract JsonNode apply(final JsonNode node, final int index)
         throws JsonPatchException;
 
     @Override
