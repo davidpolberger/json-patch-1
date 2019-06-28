@@ -61,6 +61,6 @@ public final class CopyOperation
                               index,
                               "copy",
                               from.toString()));
-        return new AddOperation(path, dupData).applyMutating(node);
+        return new AddOperation(path, dupData).applyMutating(node, index);
     }
 }

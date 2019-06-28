@@ -92,8 +92,8 @@ public abstract class JsonPatchOperation
      * @return the patched value
      * @throws JsonPatchException operation failed to apply to this value
      */
-    public JsonNode apply(final JsonNode node) throws JsonPatchException {
-        return applyMutating(node.deepCopy());
+    public JsonNode apply(final JsonNode node, final int index) throws JsonPatchException {
+        return applyMutating(node.deepCopy(), index);
     }
 
     protected abstract JsonNode applyMutating(final JsonNode node, final int index)
