@@ -152,6 +152,17 @@ public final class JsonPatch
         return ret;
     }
 
+    /**
+     * Returns the number of operations of this patch.
+     *
+     * @return
+     *   the number of operations of this patch.
+     */
+    public int size()
+    {
+        return operations.size();
+    }
+
     @Override
     public String toString()
     {
